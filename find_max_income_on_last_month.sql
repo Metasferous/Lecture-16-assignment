@@ -9,7 +9,10 @@ HAVING id IN (
         WHERE settling >= date_trunc('month', current_date - interval '1 month')
         AND settling < date_trunc('month', current_date)
     ) a
-    FULL OUTER JOIN rooms b
+    FULL OUTER JOIN (
+        SELECT id, host_id
+        FROM rooms
+    ) b
     ON a.room_id=b.id
     GROUP BY b.host_id
     ORDER BY SUM(paid) DESC
