@@ -1,20 +1,7 @@
-SELECT nickname, id
-FROM users
-GROUP BY id
-HAVING id IN (
-    SELECT host_id
-    FROM (
-        SELECT room_id, paid, settling
-        FROM reservations
-        WHERE settling >= date_trunc('month', current_date - interval '1 month')
-        AND settling < date_trunc('month', current_date)
-    ) a
-    FULL OUTER JOIN (
-        SELECT id, host_id
-        FROM rooms
-    ) b
-    ON a.room_id=b.id
-    GROUP BY b.host_id
-    ORDER BY SUM(paid) DESC
-    LIMIT 1
-);
+SELECT a.nickname, a.id
+FROM users a
+FULL OUTER JOIN reviews b
+ON a.id = b.host_id
+GROUP BY a.id
+ORDER BY AVG(b.rate)
+LIMIT 1;
