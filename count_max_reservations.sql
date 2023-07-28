@@ -1,11 +1,8 @@
-SELECT nickname, id
-FROM users
-GROUP BY id
-HAVING id IN (
-    SELECT user_id
-    FROM reservations
-    GROUP BY user_id
-    ORDER BY count(*) DESC
-    LIMIT 1
-);
+SELECT a.nickname, a.id
+FROM users a
+FULL OUTER JOIN reservations b
+ON a.id = b.user_id
+GROUP BY a.nickname, a.id
+ORDER BY count(*) DESC
+LIMIT 1;
 
